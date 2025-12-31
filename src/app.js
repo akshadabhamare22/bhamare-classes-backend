@@ -10,15 +10,37 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 import timetableRoutes from "./routes/timetable.routes.js";
 import teacherRoutes from "./routes/teacher.routes.js";
 import revenueRoutes from "./routes/revenue.routes.js";
+
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+/* ===============================
+   ✅ CORS CONFIG (IMPORTANT)
+================================ */
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",               // local frontend
+      "https://bhamare-classes.netlify.app"  // live frontend
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+  })
+);
 
-// static files
+/* ===============================
+   BODY PARSERS
+================================ */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+/* ===============================
+   STATIC FILES
+================================ */
 app.use("/uploads", express.static("uploads"));
 
-// routes
+/* ===============================
+   ROUTES
+================================ */
 app.use("/api/auth", authRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/attendance", attendanceRoutes);
@@ -26,7 +48,7 @@ app.use("/api/fees", feesRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/timetable", timetableRoutes);
-app.use("/api/teachers", teacherRoutes)
+app.use("/api/teachers", teacherRoutes);
 app.use("/api/revenue", revenueRoutes);
 
 export default app;
